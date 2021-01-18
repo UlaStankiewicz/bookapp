@@ -1,0 +1,59 @@
+<databaseChangeLog
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+  <changeSet id="add-book-table" author="nidzg_a">
+    <createTable tableName="book">
+      <column name="id" type="BIGINT">
+        <constraints nullable="false" primaryKey="true" primaryKeyName="book_pk" />
+      </column>
+      <column name="title" type="VARCHAR(512)">
+        <constraints nullable="false" />
+      </column>
+      <column name="author" type="VARCHAR(512)">
+        <constraints nullable="true" />
+      </column>
+      <column name="ISBN" type="VARCHAR(64)">
+        <constraints nullable="false" />
+      </column>
+      <column name="number_pages" type="INTEGER">
+        <constraints nullable="false" />
+      </column>
+      <column name="rating" type="INTEGER">
+        <constraints nullable="false" />
+      </column>
+    </createTable>
+    <createSequence sequenceName="sq_book" startValue="1" />
+  </changeSet>
+
+  <changeSet id="load-books-data" author="nidzg_a">
+    <sqlFile dbms="postgresql" path="books_data.sql" relativeToChangelogFile="true" splitStatements="true" encoding="utf8"/>
+  </changeSet>
+
+  <changeSet id="add-comment-table" author="nidzg_a">
+    <createTable tableName="comment">
+      <column name="id" type="BIGINT">
+        <constraints nullable="false" primaryKey="true" primaryKeyName="comment_pk" />
+      </column>
+      <column name="description" type="VARCHAR(2048)">
+        <constraints nullable="false" />
+      </column>
+      <column name="book_id" type="BIGINT">
+        <constraints nullable="false" />
+      </column>
+      <column name="creation_datetime" type="datetime2">
+        <constraints nullable="false" />
+      </column>
+    </createTable>
+    <addForeignKeyConstraint baseTableName="comment" baseColumnNames="book_id" constraintName="fk_comment_book"
+      referencedTableName="book" referencedColumnNames="id" />
+    <createSequence sequenceName="sq_comment" startValue="1"/>
+  </changeSet>
+
+  <changeSet id="load-comment" author="nidzg_a">
+    <sqlFile dbms="postgresql" path="comment_data.sql" relativeToChangelogFile="true" splitStatements="true" encoding="utf8"/>
+  </changeSet>
+
+</databaseChangeLog>

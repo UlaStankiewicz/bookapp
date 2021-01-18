@@ -1,0 +1,22 @@
+version: '3.1'
+services:
+  bookapp:
+    container_name: bookapp
+    image: bookapp
+    build: ./
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgresql
+  postgresql:
+    image: postgres
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_PASSWORD=mypassword
+      - POSTGRES_USER=endriu
+      - POSTGRES_DB=BookDB
+volumes:
+  pgdata:
